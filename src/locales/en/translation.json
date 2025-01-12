@@ -1,0 +1,15 @@
+{
+    "logo": "trendwaa",
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "userStore": "User Store",
+      "dashboard": "Dashboard",
+      "contact": "Contact Us",
+      "shopNow": "Shop Now",
+      "ourCategories": "Our Categories",
+      "featuredProducts": "Featured Products",
+      "testimonials": "What Our Customers Say"
+    }
+  }
+  

@@ -1,0 +1,19 @@
+{
+    "logo": "ترندوا",
+    "nav": {
+      "home": "الرئيسية",
+      "products": "المنتجات",
+      "userStore": "متجر المستخدم",
+      "dashboard": "لوحة التحكم",
+      "contact": "اتصل بنا",
+      "shopNow": "تسوق الآن",
+      "ourCategories": "فئاتنا",
+      "featuredProducts": "المنتجات المميزة",
+      "testimonials": "ما يقوله عملاؤنا",
+      "account": "الحساب",
+      "wishlist": "قائمة الرغبات",
+      "cart": "عربة التسوق",
+      "login": "تسجيل دخول"
+    }
+  }
+  

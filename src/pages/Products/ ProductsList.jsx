@@ -60,13 +60,13 @@ const ProductCard = ({ product }) => {
         </div>
         <div className="mt-4 flex justify-between">
           <Link
-            to={`/products/view/${product.productid}`}
+            to={`/dashboard/products/view/${product.productid}`}
             className="text-blue-500 hover:underline font-medium"
           >
             View
           </Link>
           <Link
-            to={`/products/edit/${product.productid}`}
+            to={`/dashboard/products/edit/${product.productid}`}
             className="text-green-500 hover:underline font-medium"
           >
             Edit

@@ -8,6 +8,7 @@ import {
   FiChevronDown,
   FiMenu,
   FiBox,
+  FiTrendingUp
 } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
@@ -45,10 +46,8 @@ const Sidebar = () => {
         { name: "Add Products", path: "/dashboard/products/add" },
         { name: "Products List", path: "/dashboard/products/list" },
         { name: "Delete Products", path: "/dashboard/products/delete" },
-        // New "Add Category" Sub-Item will be added here
         { name: "Add Category", path: "/dashboard/products/add-category" },
       ],
-  
     },
     {
       name: "Orders",
@@ -57,6 +56,15 @@ const Sidebar = () => {
         { name: "Processed", path: "/dashboard/orders/processed" },
         { name: "Shipped", path: "/dashboard/orders/shipped" },
         { name: "Returned", path: "/dashboard/orders/returned" },
+      ],
+    },
+    {
+      name: "Trends & Brands",
+      icon: <FiTrendingUp />,  // Choose an appropriate icon
+      subItems: [
+        { name: "Featured Products", path: "/dashboard/trends-brands/featured-products" },
+        { name: "Add Trends", path: "/dashboard/trends-brands/add-trends" },
+        { name: "Add Brands", path: "/dashboard/trends-brands/add-brands" },
       ],
     },
     {
@@ -69,6 +77,8 @@ const Sidebar = () => {
         { name: "Sign out", path: "/dashboard/account/signout" },
       ],
     },
+    // New Menu Item: Trends & Brands
+   
   ];
 
   const toggleMenu = (menuName) => {

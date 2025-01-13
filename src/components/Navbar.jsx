@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSearch, FiPhone } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const accountDropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   const navLinks = [
     { name: 'ملابس نسائية', path: '/women' },
     { name: 'الصحة و الجمال', path: '/beauty' },
-    { name: 'المنزل والمطبخ', path: '/sale' },
-    { name: ' مجوهرات واكسسوارات', path: '/sale' },
+    { name: 'المنزل والمطبخ', path: '/home-kitchen' },
+    { name: 'مجوهرات واكسسوارات', path: '/jewelry-accessories' },
   ];
 
   // Effect to handle clicks outside the account dropdown
@@ -27,6 +28,23 @@ const Navbar = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Effect to handle clicks outside the mobile menu
+  useEffect(() => {
+    const handleClickOutsideMobile = (event) => {
+      if (
+        mobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target) &&
+        !event.target.closest('button[aria-label="Toggle mobile menu"]')
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutsideMobile);
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutsideMobile);
+  }, [mobileMenuOpen]);
 
   return (
     <nav className="bg-white text-black sticky top-0 z-50" dir="rtl">
@@ -45,7 +63,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Icons with Currency Dropdown and Call Icon */}
+          {/* Icons with Currency Dropdown and Account/Wishlist/Cart Icons */}
           <div className="flex items-center space-x-reverse space-x-4">
             {/* Currency Dropdown */}
             <div className="relative">
@@ -57,11 +75,6 @@ const Navbar = () => {
                 <option value="eur">EUR</option>
               </select>
             </div>
-
-            {/* Call Icon */}
-            <Link to="/call" className="hover:text-gray-600 transition">
-              <FiPhone size={24} className="text-black" />
-            </Link>
 
             {/* Account Icon with Styled Dropdown */}
             <div className="relative" ref={accountDropdownRef}>
@@ -90,36 +103,36 @@ const Navbar = () => {
                   {/* Arrow Pointer */}
                   <div className="absolute top-0 right-6 w-3 h-3 bg-white transform rotate-45 -mt-1 border-t border-l border-gray-200"></div>
                   <div className="bg-white border border-gray-200 shadow-lg rounded-md transition ease-out duration-200">
-                    <Link 
-                      to="/login" 
+                    <Link
+                      to="/login"
                       className="block px-4 py-2 hover:bg-gray-100 text-black text-right"
                       onClick={() => setAccountDropdownOpen(false)}
                     >
                       تسجيل الدخول / حسابي
                     </Link>
-                    <Link 
-                      to="/orders" 
+                    <Link
+                      to="/orders"
                       className="block px-4 py-2 hover:bg-gray-100 text-black text-right"
                       onClick={() => setAccountDropdownOpen(false)}
                     >
                       طلباتي
                     </Link>
-                    <Link 
-                      to="/coupons" 
+                    <Link
+                      to="/coupons"
                       className="block px-4 py-2 hover:bg-gray-100 text-black text-right"
                       onClick={() => setAccountDropdownOpen(false)}
                     >
                       قسائمي
                     </Link>
-                    <Link 
-                      to="/messages" 
+                    <Link
+                      to="/messages"
                       className="block px-4 py-2 hover:bg-gray-100 text-black text-right"
                       onClick={() => setAccountDropdownOpen(false)}
                     >
                       الرسائل
                     </Link>
-                    <Link 
-                      to="/points" 
+                    <Link
+                      to="/points"
                       className="block px-4 py-2 hover:bg-gray-100 text-black text-right"
                       onClick={() => setAccountDropdownOpen(false)}
                     >
@@ -180,6 +193,7 @@ const Navbar = () => {
           </div>
           <div className="md:hidden">
             <button
+              aria-label="Toggle mobile menu"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-gray-600 hover:text-gray-800 focus:outline-none focus:text-gray-800 transition"
             >
@@ -218,11 +232,15 @@ const Navbar = () => {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-b border-gray-300 pb-4">
+          <div ref={mobileMenuRef} className="md:hidden border-b border-gray-300 pb-4">
             <ul className="flex flex-col space-y-2 mt-2">
               {navLinks.map((link, idx) => (
                 <li key={idx}>
-                  <Link to={link.path} className="block px-4 py-2 hover:bg-gray-200 transition">
+                  <Link
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-2 hover:bg-gray-200 transition"
+                  >
                     {link.name}
                   </Link>
                 </li>

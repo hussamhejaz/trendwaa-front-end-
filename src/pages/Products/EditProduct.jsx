@@ -223,7 +223,7 @@ const EditProduct = () => {
 
       if (response.status === 200) {
         alert("Product successfully updated!");
-        navigate("/products/list"); // Redirect to the products view page
+        navigate("/dashboard/products/list"); // Redirect to the products view page
       }
     } catch (err) {
       console.error("Error updating product:", err);

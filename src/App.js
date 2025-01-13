@@ -2,8 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardLayout from './layouts/DashboardLayout';
-import ClientLayout from './layouts/ClientLayout'; // if needed directly
-import Home from './UserStore/Home'; // or use ClientRoutes if defined separately
+import ClientRoutes from './routes/ClientRoutes';  // Use ClientRoutes for client paths
 
 function App() {
   return (
@@ -12,12 +11,8 @@ function App() {
         {/* Dashboard routes */}
         <Route path="/dashboard/*" element={<DashboardLayout />} />
 
-        {/* Client routes */}
-        <Route path="/*" element={<ClientLayout />}>
-      
-          <Route index element={<Home />} />
-        
-        </Route>
+        {/* Use ClientRoutes for all other paths */}
+        <Route path="/*" element={<ClientRoutes />} />
       </Routes>
     </Router>
   );

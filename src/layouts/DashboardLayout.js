@@ -17,6 +17,7 @@ import AddProduct from "../pages/Products/AddProduct";
 import EditProduct from "../pages/Products/EditProduct";
 import ProductView from "../components/ProductView";
 import AddCategory from "../pages/Products/AddCategory";
+import FeaturedProducts from '../components/FeaturedProducts';
 
 
 const DashboardLayout = () => {
@@ -43,6 +44,7 @@ const DashboardLayout = () => {
           <Route path="/products/edit/:id" element={<EditProduct />} />
           <Route path="/products/view/:productid" element={<ProductView />} />
           <Route path="/products/add-category" element={<AddCategory />} />
+          <Route path="/trends-brands/featured-products" element={<FeaturedProducts />} />
 
           {/* Add other dashboard routes here */}
         </Routes>

@@ -15,7 +15,7 @@ import DashboardAnnually from "../pages/Dashboard/Annually";
 import ProductsList from '../pages/Products/ ProductsList';
 import AddProduct from "../pages/Products/AddProduct";
 import EditProduct from "../pages/Products/EditProduct";
-import ProductView from "../components/ProductView";
+import ProductView from "../pages/Products/ProductView";
 import AddCategory from "../pages/Products/AddCategory";
 import FeaturedProducts from '../components/FeaturedProducts';
 

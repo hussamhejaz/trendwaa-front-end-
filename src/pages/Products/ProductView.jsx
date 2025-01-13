@@ -8,6 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // Carousel styl
 import { FaArrowLeft, FaEdit, FaImages } from 'react-icons/fa';
 import DOMPurify from 'dompurify'; // For sanitizing HTML
 import { Tab } from '@headlessui/react'; // For tabs
+import CircularLoader from "../../components/CircularLoader";
 
 const ProductView = () => {
   const { productid } = useParams();
@@ -68,18 +69,7 @@ const ProductView = () => {
   }, [API_BASE_URL, productid]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <motion.div
-          className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
-          aria-label="Loading"
-          role="status"
-          initial={{ rotate: 0 }}
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-        />
-      </div>
-    );
+    return <CircularLoader />;
   }
 
   if (error) {

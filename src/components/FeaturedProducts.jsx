@@ -1,5 +1,6 @@
 // src/components/FeaturedProducts.js
 import React, { useEffect, useState } from 'react';
+import CircularLoader from './CircularLoader';
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -34,8 +35,22 @@ const FeaturedProducts = () => {
       console.error('Error toggling featured status:', err);
     }
   };
+//   const CircularLoader = () => (
+//       <div className="flex items-center justify-center min-h-screen">
+//         <motion.div
+//           className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+//           aria-label="Loading"
+//           role="status"
+//           initial={{ rotate: 0 }}
+//           animate={{ rotate: 360 }}
+//           transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+//         />
+//       </div>
+//   )
 
-  if (loading) return <div>Loading products...</div>;
+  if (loading) {
+    return <CircularLoader />;
+  }
 
   return (
     <div className="p-4">

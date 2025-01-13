@@ -12,7 +12,7 @@ import MediaUpload from "../../components/MediaUpload";
 import DynamicField from "../../components/DynamicField";
 import { generateValidationSchema } from "../../utils/productValidationSchema"; // Updated import
 import { useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion"; // Import Framer Motion
+import CircularLoader from "../../components/CircularLoader";
 
 const EditProduct = () => {
   const navigate = useNavigate();
@@ -299,19 +299,7 @@ const EditProduct = () => {
     }
   }, [errors, watch]);
 
-  // Render Circular Loader
-  const CircularLoader = () => (
-    <div className="flex items-center justify-center min-h-screen">
-      <motion.div
-        className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
-        aria-label="Loading"
-        role="status"
-        initial={{ rotate: 0 }}
-        animate={{ rotate: 360 }}
-        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-      />
-    </div>
-  );
+
 
   if (loading) {
     return <CircularLoader />;

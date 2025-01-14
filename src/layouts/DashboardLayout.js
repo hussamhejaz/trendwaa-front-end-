@@ -17,7 +17,10 @@ import AddProduct from "../pages/Products/AddProduct";
 import EditProduct from "../pages/Products/EditProduct";
 import ProductView from "../pages/Products/ProductView";
 import AddCategory from "../pages/Products/AddCategory";
-import FeaturedProducts from '../components/FeaturedProducts';
+import FeaturedProducts from "../pages/trend and brand/FeaturedProducts.jsx"
+import AddTrends from '../pages/trend and brand/AddTrends.jsx';
+import DeleteProduct from '../pages/Products/DeleteProduct.jsx';
+import AddBrand from '../pages/trend and brand/AddBrand.jsx';
 
 
 const DashboardLayout = () => {
@@ -43,8 +46,12 @@ const DashboardLayout = () => {
           <Route path="/products/add" element={<AddProduct />} />
           <Route path="/products/edit/:id" element={<EditProduct />} />
           <Route path="/products/view/:productid" element={<ProductView />} />
+          <Route path="/products/delete" element={<DeleteProduct />} />
           <Route path="/products/add-category" element={<AddCategory />} />
           <Route path="/trends-brands/featured-products" element={<FeaturedProducts />} />
+          <Route path="/trends-brands/add-trends" element={<AddTrends />} />
+          <Route path="/trends-brands/add-brands" element={<AddBrand />} />
+     
 
           {/* Add other dashboard routes here */}
         </Routes>

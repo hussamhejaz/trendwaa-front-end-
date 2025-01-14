@@ -1,4 +1,4 @@
-// ProductsList.jsx
+// src/pages/ProductsList.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ const ProductCard = ({ product }) => {
       : "https://via.placeholder.com/300x200?text=No+Image";
 
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl relative">
       <div className="relative">
         <img
           src={imageUrl}
@@ -21,8 +21,8 @@ const ProductCard = ({ product }) => {
             console.error(
               `Failed to load image for Product ID: ${product.productid}, URL: ${imageUrl}`
             );
-            e.target.onerror = null; // Prevent infinite loop
-            e.target.src = "https://via.placeholder.com/300x200?text=No+Image"; // Fallback image
+            e.target.onerror = null;
+            e.target.src = "https://via.placeholder.com/300x200?text=No+Image";
           }}
           loading="lazy"
         />
@@ -34,6 +34,11 @@ const ProductCard = ({ product }) => {
         {product.isfeatured && (
           <span className="absolute top-2 right-2 bg-yellow-500 text-white text-sm font-semibold px-2 py-1 rounded">
             Featured
+          </span>
+        )}
+        {product.istrend && (
+          <span className="absolute top-12 right-2 bg-indigo-500 text-white text-sm font-semibold px-2 py-1 rounded">
+            Trend
           </span>
         )}
       </div>

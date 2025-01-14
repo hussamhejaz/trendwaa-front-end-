@@ -8,9 +8,13 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 
+// React Toastify
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import MediaUpload from "../../components/MediaUpload";
 import DynamicField from "../../components/DynamicField";
-import { generateValidationSchema } from "../../utils/productValidationSchema"; // Updated import
+import { generateValidationSchema } from "../../utils/productValidationSchema"; 
 import { useNavigate, useParams } from "react-router-dom";
 import CircularLoader from "../../components/CircularLoader";
 
@@ -66,8 +70,8 @@ const EditProduct = () => {
     const fetchData = async () => {
       try {
         const [productRes, categoriesRes] = await Promise.all([
-          axios.get(`${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/products/${id}`), // Relative path
-          axios.get(`${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/categories`), // Relative path
+          axios.get(`${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/products/${id}`),
+          axios.get(`${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/categories`),
         ]);
 
         const productData = productRes.data.product;
@@ -91,7 +95,7 @@ const EditProduct = () => {
         // Fetch attributes for the current category
         if (currentCategory) {
           const categoryDetailsRes = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/categories/${currentCategory.value}` // Relative path
+            `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/categories/${currentCategory.value}`
           );
           categoryFields = categoryDetailsRes.data.attributes || [];
           setCategoryAttributes(categoryFields);
@@ -122,8 +126,7 @@ const EditProduct = () => {
             : [],
           featured: productData.isfeatured || false,
           media: productData.mediaurl || [],
-          mediaURLs: productData.mediaurl || [], // Populate mediaURLs
-          // Populate other fields as needed
+          mediaURLs: productData.mediaurl || [],
         });
 
         setLoading(false);
@@ -140,7 +143,6 @@ const EditProduct = () => {
   // Update the form's validation resolver when validationSchema changes
   useEffect(() => {
     if (validationSchema) {
-      // Reset the form with existing values and apply new validation
       reset({}, { keepValues: true, keepErrors: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,7 +162,10 @@ const EditProduct = () => {
         shouldDirty: true,
       });
     } else {
-      setValue("priceAfterDiscount", "", { shouldValidate: true, shouldDirty: true });
+      setValue("priceAfterDiscount", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   }, [watchPrice, watchDiscount, setValue]);
 
@@ -170,7 +175,7 @@ const EditProduct = () => {
       if (selectedCategory) {
         try {
           const categoryDetailsRes = await axios.get(
-            `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/categories/${selectedCategory.value}` // Relative path
+            `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/categories/${selectedCategory.value}`
           );
           const categoryFields = categoryDetailsRes.data.attributes || [];
           setCategoryAttributes(categoryFields);
@@ -179,7 +184,7 @@ const EditProduct = () => {
           setValidationSchema(schema);
         } catch (err) {
           console.error("Error fetching category attributes:", err);
-          alert("Failed to load category-specific attributes.");
+          toast.error("Failed to load category-specific attributes.");
         }
       } else {
         setCategoryAttributes([]);
@@ -215,19 +220,21 @@ const EditProduct = () => {
         tags: transformedTags,
         mediaURL: data.mediaURLs || [],
         isFeatured: data.featured,
-        // Include other category-specific fields as needed
       };
 
       // Send PUT request to update the product
-      const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/products/update/${id}`, payload); // Relative path
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5001/api"}/products/update/${id}`,
+        payload
+      );
 
       if (response.status === 200) {
-        alert("Product successfully updated!");
-        navigate("/dashboard/products/list"); // Redirect to the products view page
+        navigate("/dashboard/products/list");
+        toast.success("Product successfully updated!");
       }
     } catch (err) {
       console.error("Error updating product:", err);
-      alert("Failed to update product. Please try again.");
+      toast.error("Failed to update product. Please try again.");
     }
   };
 
@@ -239,7 +246,11 @@ const EditProduct = () => {
   // Render category-specific fields
   const renderCategoryFields = () => {
     if (!selectedCategory || categoryAttributes.length === 0) {
-      return <p className="text-gray-500">Please select a category to view specific fields.</p>;
+      return (
+        <p className="text-gray-500">
+          Please select a category to view specific fields.
+        </p>
+      );
     }
 
     return (
@@ -283,7 +294,7 @@ const EditProduct = () => {
     if (valid) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      alert("Please fill out all required fields before moving to the next step.");
+      toast.warn("Please fill out all required fields before moving to the next step.");
     }
   };
 
@@ -291,15 +302,13 @@ const EditProduct = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
-  // Debugging: Log form state
+  // Debugging: Log form state (optional)
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       console.log("Form Errors:", errors);
       console.log("Form Data:", watch());
     }
   }, [errors, watch]);
-
-
 
   if (loading) {
     return <CircularLoader />;
@@ -592,7 +601,7 @@ const EditProduct = () => {
                       {...field}
                       theme="snow"
                       placeholder="Enter product description"
-                      onChange={(content, delta, source, editor) => {
+                      onChange={(content) => {
                         field.onChange(content);
                       }}
                       className={`h-40 ${
@@ -625,7 +634,6 @@ const EditProduct = () => {
                         { value: "Sale", label: "Sale" },
                         { value: "Popular", label: "Popular" },
                         { value: "Limited", label: "Limited" },
-                        // Add more tag options as needed
                       ]}
                       placeholder="Select or create tags"
                       classNamePrefix="react-select"

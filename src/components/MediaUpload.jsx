@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
 
 const MediaUpload = ({ setValue, errors }) => {
   const [files, setFiles] = useState([]);
@@ -16,6 +17,7 @@ const MediaUpload = ({ setValue, errors }) => {
     const updatedFiles = [...files, ...mappedFiles];
     setFiles(updatedFiles);
     setValue("media", updatedFiles, { shouldValidate: true });
+    
   };
 
   const {
@@ -81,43 +83,46 @@ const MediaUpload = ({ setValue, errors }) => {
       files.forEach((file) => {
         formData.append('files', file);
       });
-
+  
       const response = await fetch('http://localhost:5001/api/media/upload', {
         method: 'POST',
         body: formData,
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to upload media files.');
       }
-
+  
       const data = await response.json();
-      console.log('Received mediaURLs from backend:', data.mediaURLs); // Added logging
-
+      console.log('Received mediaURLs from backend:', data.mediaURLs);
+  
       // Validate mediaURLs
       if (!data.mediaURLs || !Array.isArray(data.mediaURLs) || data.mediaURLs.length === 0) {
         throw new Error('No valid media URLs received from backend.');
       }
-
+  
       // Ensure all mediaURLs are valid strings
       const validMediaURLs = data.mediaURLs.filter(url => typeof url === 'string' && url.length > 0);
       if (validMediaURLs.length === 0) {
         throw new Error('All received media URLs are invalid.');
       }
-
+  
       setValue("mediaURLs", validMediaURLs, { shouldValidate: true });
-      alert('Media uploaded successfully!');
+      toast.success('Media uploaded successfully!');  // <-- Success toast
+      
       // Optionally, clear the uploaded files
       setFiles([]);
       setValue("media", [], { shouldValidate: true }); // Clear media after upload
     } catch (error) {
       console.error('Error uploading media:', error);
       setUploadError(error.message);
+      toast.error(error.message || 'Failed to upload media.');  // <-- Error toast
     } finally {
       setUploading(false);
     }
   };
+  
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-inner">

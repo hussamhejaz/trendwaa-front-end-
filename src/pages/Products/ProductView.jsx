@@ -93,7 +93,7 @@ const ProductView = () => {
         <FaArrowLeft className="text-yellow-500 text-6xl mb-4" />
         <p className="text-yellow-700 text-lg mb-4">Product not found.</p>
         <Link
-          to="/products/list"
+          to="/dashboard/products/list"
           className="flex items-center px-6 py-3 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition"
         >
           <FaArrowLeft className="mr-2" /> Back to Products
@@ -298,14 +298,14 @@ const ProductView = () => {
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
             <Link
-              to={`/products/edit/${productid}`}
+              to={`/dashboard/products/edit/${productid}`}
               className="flex-1 px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition shadow-md flex items-center justify-center"
               aria-label="Edit Product"
             >
               <FaEdit className="mr-2" /> Edit Product
             </Link>
             <Link
-              to="/products/list"
+              to="/dashboard/products/list"
               className="flex-1 px-6 py-3 bg-gray-600 text-white rounded-full hover:bg-gray-700 transition shadow-md flex items-center justify-center"
               aria-label="Back to Products"
             >

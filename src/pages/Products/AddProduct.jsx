@@ -6,6 +6,8 @@ import Select from "react-select";
 import CreatableSelect from 'react-select/creatable'; // Correct import
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import MediaUpload from "../../components/MediaUpload";
 import DynamicField from "../../components/DynamicField";
@@ -119,69 +121,73 @@ const AddProduct = () => {
     }
   }, [watchPrice, watchDiscount, setValue]);
 
-  const onSubmit = async (data) => {
-    setSubmitting(true);
-    setSubmitError(null);
-    setSubmitSuccess(null);
-    try {
-      // Prepare the payload without priceAfterDiscount
-      const payload = {
-        productNumber: data.productNumber,
-        sku: data.sku,
-        productName: data.name, // Mapped correctly
-        categoryID: selectedCategory ? parseInt(selectedCategory.value, 10) : null,
-        categoryName: selectedCategory ? selectedCategory.label : null,
-        price: parseFloat(data.price),
-        discountPercentage: parseFloat(data.discountPercentage) || 0,
-        stockQuantity: parseInt(data.stock, 10),
-        inventoryAlertThreshold: parseInt(data.inventoryAlert, 10) || 0,
-        description: data.description,
-        tags: data.tags,
-        mediaURL: data.mediaURLs.filter(url => typeof url === 'string' && url.length > 0),
-        isFeatured: data.featured,
-        brand: data.brand,
-        warranty: data.warrantyPeriod,
-        // Add category-specific attributes
-        attributes: categoryAttributes.reduce((acc, attr) => {
-          acc[attr.name] = data[attr.name] || null;
-          return acc;
-        }, {}),
-      };
+const onSubmit = async (data) => {
+  setSubmitting(true);
+  setSubmitError(null);
+  setSubmitSuccess(null);
+  try {
+    // Prepare the payload without priceAfterDiscount
+    const payload = {
+      productNumber: data.productNumber,
+      sku: data.sku,
+      productName: data.name, // Mapped correctly
+      categoryID: selectedCategory ? parseInt(selectedCategory.value, 10) : null,
+      categoryName: selectedCategory ? selectedCategory.label : null,
+      price: parseFloat(data.price),
+      discountPercentage: parseFloat(data.discountPercentage) || 0,
+      stockQuantity: parseInt(data.stock, 10),
+      inventoryAlertThreshold: parseInt(data.inventoryAlert, 10) || 0,
+      description: data.description,
+      tags: data.tags,
+      mediaURL: data.mediaURLs.filter(url => typeof url === 'string' && url.length > 0),
+      isFeatured: data.featured,
+      brand: data.brand,
+      warranty: data.warrantyPeriod,
+      // Add category-specific attributes
+      attributes: categoryAttributes.reduce((acc, attr) => {
+        acc[attr.name] = data[attr.name] || null;
+        return acc;
+      }, {}),
+    };
 
-      console.log('Submitting payload:', payload); // Debugging
+    console.log('Submitting payload:', payload); // Debugging
 
-      // Send the payload to the backend using the correct API endpoint
-      const response = await fetch('http://localhost:5001/api/products/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+    // Send the payload to the backend using the correct API endpoint
+    const response = await fetch('http://localhost:5001/api/products/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (errorData.errors) {
-          const validationErrors = errorData.errors.map(err => err.msg).join(', ');
-          throw new Error(validationErrors);
-        } else {
-          throw new Error(errorData.error || 'Failed to add product.');
-        }
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (errorData.errors) {
+        const validationErrors = errorData.errors.map(err => err.msg).join(', ');
+        throw new Error(validationErrors);
+      } else {
+        throw new Error(errorData.error || 'Failed to add product.');
       }
-
-      const result = await response.json();
-      setSubmitSuccess(result.message || 'Product added successfully!');
-      reset(); // Reset the form
-      setSelectedCategory(null);
-      setCategoryAttributes([]);
-      setCurrentStep(1);
-    } catch (error) {
-      console.error('Error submitting product:', error);
-      setSubmitError(error.message);
-    } finally {
-      setSubmitting(false);
     }
-  };
+
+    const result = await response.json();
+    setSubmitSuccess(result.message || 'Product added successfully!');
+    toast.success(result.message || 'Product added successfully!');  // <-- Added toast here
+
+    reset(); // Reset the form
+    setSelectedCategory(null);
+    setCategoryAttributes([]);
+    setCurrentStep(1);
+  } catch (error) {
+    console.error('Error submitting product:', error);
+    setSubmitError(error.message);
+    toast.error(error.message || 'An error occurred while adding the product.');  // Optional: toast for errors
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   const renderCategoryFields = () => {
     if (!selectedCategory) {
@@ -262,6 +268,7 @@ const AddProduct = () => {
     <div className="min-h-screen bg-gray-50 py-10 px-4 flex justify-center items-start">
       <div className="max-w-5xl w-full bg-white shadow-lg rounded-lg p-8">
         <h2 className="text-3xl font-bold mb-6 text-gray-800">Add New Product</h2>
+        <ToastContainer />
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
           {/* Step Indicators */}
